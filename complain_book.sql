@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 30, 2017 at 09:07 AM
+-- Generation Time: May 31, 2017 at 09:23 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -19,6 +19,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `complain_book`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `allocate_supervisor`
+--
+
+CREATE TABLE `allocate_supervisor` (
+  `id` int(11) NOT NULL,
+  `ticket_id` int(11) UNSIGNED ZEROFILL NOT NULL,
+  `supervisor_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `allocate_supervisor`
+--
+
+INSERT INTO `allocate_supervisor` (`id`, `ticket_id`, `supervisor_id`) VALUES
+(1, 00000000001, 1),
+(2, 00000000002, 1);
 
 -- --------------------------------------------------------
 
@@ -48411,13 +48431,13 @@ CREATE TABLE `complain_mst` (
 --
 
 INSERT INTO `complain_mst` (`id`, `ticket_id`, `phone_no`, `city`, `site`, `issue_desc`, `status`, `c_created`, `c_updated`) VALUES
-(1, 00000000005, '7359508036', 1, 1, 'ssssssssssssssssssss', 0, NULL, NULL),
-(2, 00000000005, '1212121212', 2, 1, 'werwrwrwrw', 0, NULL, NULL),
-(3, 00000000005, '1010101010', 1, 1, 'sewewefw', 0, NULL, NULL),
-(4, 00000000005, '8756748903', 1, 1, 'the information about stopped lift ', 0, NULL, NULL),
-(5, 00000000005, '7656789098', 1, 1, 'hello...there is an issue of lift at the given particular area kindly take a note its an emergency', 0, NULL, NULL),
-(6, 00000000006, '9890987892', 791, 4, 'lift stopped working at the 4th floor', 0, NULL, NULL),
-(7, 00000000007, '7878787878', 791, 10, 'asdadwdwe', 0, NULL, NULL);
+(1, 00000000001, '8756748903', 1068, 5, 'test desc', 0, NULL, NULL),
+(2, 00000000002, '8756748903', 1068, 5, 'asfdasfdsfdsf', 0, NULL, NULL),
+(3, 00000000003, '1212121212', 791, 4, 'lift not working', 0, NULL, NULL),
+(4, 00000000004, '2323232323', 791, 4, 'efwwfw', 0, NULL, NULL),
+(5, 00000000005, '1212121212', 791, 10, 'effws', 0, NULL, NULL),
+(6, 00000000006, 'sdfcesfsfs', 791, 4, 'addcasdsad', 0, NULL, NULL),
+(7, 00000000007, '8756748903', 791, 4, '3333333333333333333', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -52869,11 +52889,22 @@ CREATE TABLE `supervisor_mst` (
 --
 
 INSERT INTO `supervisor_mst` (`supervisor_id`, `supervisor_name`, `qualification`, `expertise`) VALUES
-(1, 'R.H.Singh', 'ME', 'Lift repairing');
+(1, 'R.H.Singh', 'ME', 'Lift repairing'),
+(2, 'H.M Patel', 'BE', 'Analysis'),
+(3, 'H.H Sharma', 'ITI', 'Repairing'),
+(4, 'Mrs nikita gandhi', 'ME', 'Analysis'),
+(5, 'Mrs Ankita Joshi', 'BE', 'Testing'),
+(6, 'Vipul Patel', 'MSC', 'technician');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `allocate_supervisor`
+--
+ALTER TABLE `allocate_supervisor`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `area`
@@ -52922,6 +52953,11 @@ ALTER TABLE `supervisor_mst`
 --
 
 --
+-- AUTO_INCREMENT for table `allocate_supervisor`
+--
+ALTER TABLE `allocate_supervisor`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT for table `area`
 --
 ALTER TABLE `area`
@@ -52955,7 +52991,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `supervisor_mst`
 --
 ALTER TABLE `supervisor_mst`
-  MODIFY `supervisor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `supervisor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

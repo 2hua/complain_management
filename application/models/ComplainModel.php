@@ -68,4 +68,35 @@ class ComplainModel extends CI_model
 			$this->db->insert('supervisor_mst',$user_data);
 		
 	}
+	public function getAllSupervisors(){
+		$supervisors = $this->db->get('supervisor_mst')->result_array();
+		return $supervisors;
+	}
+	public function allocateSupervisor()
+	{	
+			$ticket_id=$this->input->post('ticket_id');
+			$this->db->where('ticket_id',$ticket_id);
+			$status=$this->db->get('allocate_supervisor')->result_array();
+			$sucess_status=0;
+		if(empty($status))
+		{
+			$ticket_id=$this->input->post('ticket_id');
+			$supervisor_id=$this->input->post('supervisor_id');
+		
+			$user_data=array(
+			'ticket_id'=>$ticket_id,
+			'supervisor_id'=>$supervisor_id,
+			);
+			$this->db->insert('allocate_supervisor',$user_data);
+			$sucess_status=1;
+		}
+		return $sucess_status;
+		
+	}
+	public function getAllTickets(){
+		$this->db->where('status',0);
+		$tickets = $this->db->get('complain_mst')->result_array();
+		return $tickets;
+	}
+	
 }

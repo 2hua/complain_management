@@ -25,9 +25,9 @@ class Welcome extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->load->model('ComplainModel');
 	}
-	public function index($status="")
+	public function index()
 	{
-		$data['status']=$status;
+		
 		$data['allStates'] = $this->ComplainModel->getAllStates();
 		$this->load->view('admin/header');
 		$this->load->view('admin/dashboard',$data);
@@ -53,12 +53,13 @@ class Welcome extends CI_Controller {
 		{
 			$status=$this->ComplainModel->insertUserData();
 			if($status>0){
-				 redirect('/welcome/index/successful');
+				 $this->session->set_flashdata('ticket_success','Records Inserted Sucessfully');
 			}
 			else
 			{
-				 redirect('/welcome/index/unsuccessful');
+				 $this->session->set_flashdata('ticket_error','Oops Something goes wrong');
 			}
+			redirect('/welcome/index/');
 		}
 	}
 	public function site_view(){
@@ -93,6 +94,27 @@ class Welcome extends CI_Controller {
 		$this->ComplainModel->insertSupervisor();
 		header("Location:".base_url('index.php/welcome/supervisor_view'));
 		
+	}
+	public function allocate_supervisor_view()
+	{
+		$data['allSupervisors'] = $this->ComplainModel->getAllSupervisors();
+		$data['alltickets']=$this->ComplainModel->getAllTickets();
+		$this->load->view('admin/header');
+		$this->load->view('admin/allocate_supervisor',$data);
+		$this->load->view('admin/footer');
+	}
+	public function add_allocate_supervisor()
+	{
+		$success_status = $this->ComplainModel->allocateSupervisor();
+		if($success_status>0){
+				 $this->session->set_flashdata('allocate_msg','Ticket Assign Successfully');
+			}
+			else
+			{
+				 $this->session->set_flashdata('allocate_msg_error','Ticket Already Assigned');
+			}
+	//	header("Location:".base_url('index.php/welcome/allocate_supervisor_view'));
+	redirect('/welcome/allocate_supervisor_view/');
 	}
 	
 }

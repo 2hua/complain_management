@@ -73,12 +73,20 @@ function getSites(cityId){
 			<?php echo validation_errors();  ?>
 			</div>	
 			<?php
-			} if(isset($status) && $status!="") {
-				?>
-				<div class="alert alert-danger"><?php echo $status; ?></div>
-				<?php
 			}
 			?>
+				<?php
+	if($this->session->flashdata('ticket_success')){
+		?>
+		<div class="alert alert-success"><?php echo $this->session->flashdata('ticket_success'); ?></div>
+		<?php 
+	}
+	if($this->session->flashdata('ticket_error')){
+		?>
+		<div class="alert alert-danger"><?php echo $this->session->flashdata('ticket_error'); ?></div>
+		<?php
+	}
+	?>
 			  </div>
             <!-- /.box-header -->
             <!-- form start -->
