@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 31, 2017 at 09:23 AM
+-- Generation Time: Jun 01, 2017 at 09:09 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -39,6 +39,28 @@ CREATE TABLE `allocate_supervisor` (
 INSERT INTO `allocate_supervisor` (`id`, `ticket_id`, `supervisor_id`) VALUES
 (1, 00000000001, 1),
 (2, 00000000002, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `allocate_technician`
+--
+
+CREATE TABLE `allocate_technician` (
+  `id` int(11) NOT NULL,
+  `ticket_id` int(11) UNSIGNED ZEROFILL NOT NULL,
+  `technician_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `allocate_technician`
+--
+
+INSERT INTO `allocate_technician` (`id`, `ticket_id`, `technician_id`) VALUES
+(2, 00000000005, 1),
+(3, 00000000001, 1),
+(4, 00000000003, 1),
+(5, 00000000002, 1);
 
 -- --------------------------------------------------------
 
@@ -48411,6 +48433,26 @@ INSERT INTO `cities` (`id`, `name`, `state_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `closing_comment`
+--
+
+CREATE TABLE `closing_comment` (
+  `id` int(11) NOT NULL,
+  `ticket_id` int(11) UNSIGNED ZEROFILL NOT NULL,
+  `issue_comment` varchar(1000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `closing_comment`
+--
+
+INSERT INTO `closing_comment` (`id`, `ticket_id`, `issue_comment`) VALUES
+(1, 00000000001, 'asdawdasd'),
+(2, 00000000002, 'lift issue solved ...working successfully');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `complain_mst`
 --
 
@@ -48431,9 +48473,9 @@ CREATE TABLE `complain_mst` (
 --
 
 INSERT INTO `complain_mst` (`id`, `ticket_id`, `phone_no`, `city`, `site`, `issue_desc`, `status`, `c_created`, `c_updated`) VALUES
-(1, 00000000001, '8756748903', 1068, 5, 'test desc', 0, NULL, NULL),
-(2, 00000000002, '8756748903', 1068, 5, 'asfdasfdsfdsf', 0, NULL, NULL),
-(3, 00000000003, '1212121212', 791, 4, 'lift not working', 0, NULL, NULL),
+(1, 00000000001, '8756748903', 1068, 5, 'test desc', 1, NULL, NULL),
+(2, 00000000002, '8756748903', 1068, 5, 'asfdasfdsfdsf', 1, NULL, NULL),
+(3, 00000000003, '1212121212', 791, 4, 'lift not working', 2, NULL, NULL),
 (4, 00000000004, '2323232323', 791, 4, 'efwwfw', 0, NULL, NULL),
 (5, 00000000005, '1212121212', 791, 10, 'effws', 0, NULL, NULL),
 (6, 00000000006, 'sdfcesfsfs', 791, 4, 'addcasdsad', 0, NULL, NULL),
@@ -52896,6 +52938,26 @@ INSERT INTO `supervisor_mst` (`supervisor_id`, `supervisor_name`, `qualification
 (5, 'Mrs Ankita Joshi', 'BE', 'Testing'),
 (6, 'Vipul Patel', 'MSC', 'technician');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `technician_mst`
+--
+
+CREATE TABLE `technician_mst` (
+  `technician_id` int(11) NOT NULL,
+  `technician_name` varchar(255) NOT NULL,
+  `qualification` varchar(255) NOT NULL,
+  `expertise` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `technician_mst`
+--
+
+INSERT INTO `technician_mst` (`technician_id`, `technician_name`, `qualification`, `expertise`) VALUES
+(1, 'abc', 'abc', 'acb');
+
 --
 -- Indexes for dumped tables
 --
@@ -52904,6 +52966,12 @@ INSERT INTO `supervisor_mst` (`supervisor_id`, `supervisor_name`, `qualification
 -- Indexes for table `allocate_supervisor`
 --
 ALTER TABLE `allocate_supervisor`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `allocate_technician`
+--
+ALTER TABLE `allocate_technician`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -52916,6 +52984,12 @@ ALTER TABLE `area`
 -- Indexes for table `cities`
 --
 ALTER TABLE `cities`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `closing_comment`
+--
+ALTER TABLE `closing_comment`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -52949,6 +53023,12 @@ ALTER TABLE `supervisor_mst`
   ADD PRIMARY KEY (`supervisor_id`);
 
 --
+-- Indexes for table `technician_mst`
+--
+ALTER TABLE `technician_mst`
+  ADD PRIMARY KEY (`technician_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -52957,6 +53037,11 @@ ALTER TABLE `supervisor_mst`
 --
 ALTER TABLE `allocate_supervisor`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `allocate_technician`
+--
+ALTER TABLE `allocate_technician`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `area`
 --
@@ -52967,6 +53052,11 @@ ALTER TABLE `area`
 --
 ALTER TABLE `cities`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48315;
+--
+-- AUTO_INCREMENT for table `closing_comment`
+--
+ALTER TABLE `closing_comment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `complain_mst`
 --
@@ -52992,6 +53082,11 @@ ALTER TABLE `states`
 --
 ALTER TABLE `supervisor_mst`
   MODIFY `supervisor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `technician_mst`
+--
+ALTER TABLE `technician_mst`
+  MODIFY `technician_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -18,6 +18,11 @@ class Welcome extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+	 /*
+		status: 2->in process
+		status: 1->close
+		status: 0->yet to assign
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -116,5 +121,57 @@ class Welcome extends CI_Controller {
 	//	header("Location:".base_url('index.php/welcome/allocate_supervisor_view'));
 	redirect('/welcome/allocate_supervisor_view/');
 	}
-	
+	public function technician_view()
+	{
+			$this->load->view('admin/header');
+			$this->load->view('admin/technician');
+			$this->load->view('admin/footer');
+	}
+	public function add_technician()
+	{
+		$this->ComplainModel->insertTechnician();
+		header("Location:".base_url('index.php/welcome/technician_view'));
+		
+	}
+	public function allocate_technician_view()
+	{
+		$data['allTechnicians'] = $this->ComplainModel->getAllTechnicians();
+		$data['allTickets']=$this->ComplainModel->getAllTicketsTech();
+		$this->load->view('admin/header');
+		$this->load->view('admin/allocate_technician',$data);
+		$this->load->view('admin/footer');
+	}
+	public function add_allocate_technician()
+	{
+		$success_status_tech = $this->ComplainModel->allocateTechnician();
+		if($success_status_tech>0){
+				 $this->session->set_flashdata('allocate_msg_tech','Ticket Assign Successfully');
+			}
+			else
+			{
+				 $this->session->set_flashdata('allocate_msg_error_tech','Ticket Already Assigned');
+			}
+	//	header("Location:".base_url('index.php/welcome/allocate_supervisor_view'));
+	redirect('/welcome/allocate_technician_view/');
+	}
+	public function techComment_view()
+	{
+			$data['allTickets']=$this->ComplainModel->getAllTicketsTechComment();
+			$this->load->view('admin/header');
+			$this->load->view('admin/techComment',$data);
+			$this->load->view('admin/footer');
+	}
+	public function add_comment()
+	{
+		$success_status_issue = $this->ComplainModel->insertComment();
+		if($success_status_issue>0){
+				 $this->session->set_flashdata('allocate_msg_issue','Issue Comment inserted successfully Successfully');
+			}
+			else
+			{
+				 $this->session->set_flashdata('allocate_msg_error_issue','Oops issue_comment cant be insert');
+			}
+	//	header("Location:".base_url('index.php/welcome/allocate_supervisor_view'));
+	redirect('/welcome/techComment_view/');
+	}
 }
