@@ -349,6 +349,11 @@
             <i class="fa fa-th"></i> <span>Allocate Supervisor</span>
           </a>
         </li>
+		 <li>
+          <a href="<?php echo base_url('index.php/welcome/supervisorComment_view'); ?>">
+            <i class="fa fa-th"></i> <span>Supervisor Comment</span>
+          </a>
+        </li>
 		<li>
           <a href="<?php echo base_url('index.php/welcome/technician_view'); ?>">
             <i class="fa fa-th"></i> <span>Technician</span>
@@ -359,17 +364,10 @@
             <i class="fa fa-th"></i> <span>Allocate Technician</span>
           </a>
         </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-table"></i> <span>Tables</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+       <li>
+          <a href="<?php echo base_url('index.php/welcome/techComment_view'); ?>">
+            <i class="fa fa-th"></i> <span>Close Ticket</span>
           </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i> Simple tables</a></li>
-            <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i> Data tables</a></li>
-          </ul>
         </li>
         <li>
           <a href="pages/calendar.html">

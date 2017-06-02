@@ -82,6 +82,16 @@ class Welcome extends CI_Controller {
 		$sites=$this->ComplainModel->getSiteByCityId();
 		die(json_encode(array('msg'=>$sites,'status'=>'success')));
 	}
+	public function getTicketsBySiteId()
+	{
+		$tickets=$this->ComplainModel->getTicketsBySiteId();
+		die(json_encode(array('msg'=>$tickets,'status'=>'success')));
+	}
+	public function getSupervisorByTicketId()
+	{
+		$supervisor=$this->ComplainModel->getSupervisorByTicketId();
+		die(json_encode(array('msg'=>$supervisor,'status'=>'success')));
+	}
 	public function add_site()
 	{
 		$this->ComplainModel->insertSite();
@@ -104,6 +114,7 @@ class Welcome extends CI_Controller {
 	{
 		$data['allSupervisors'] = $this->ComplainModel->getAllSupervisors();
 		$data['alltickets']=$this->ComplainModel->getAllTickets();
+		$data['allStates'] = $this->ComplainModel->getAllStates();		
 		$this->load->view('admin/header');
 		$this->load->view('admin/allocate_supervisor',$data);
 		$this->load->view('admin/footer');
@@ -173,5 +184,32 @@ class Welcome extends CI_Controller {
 			}
 	//	header("Location:".base_url('index.php/welcome/allocate_supervisor_view'));
 	redirect('/welcome/techComment_view/');
+	}
+	public function supervisorComment_view()
+	{
+			$data['allTickets']=$this->ComplainModel->getAllTicketsSupervisorComment();
+			$data['allSupervisors'] = $this->ComplainModel->getAllSupervisors();
+			$this->load->view('admin/header');
+			$this->load->view('admin/supervisorComment',$data);
+			$this->load->view('admin/footer');
+	}
+	public function add_supervisor_comment()
+	{
+		$sucess_status_issue_supervisor = $this->ComplainModel->insertCommentSupervisor();
+		if($sucess_status_issue_supervisor>0){
+				 $this->session->set_flashdata('allocate_msg_issue_supervisor','Issue Comment inserted successfully Successfully');
+			}
+			else
+			{
+				 $this->session->set_flashdata('allocate_msg_error_issue_supervisor','Oops issue_comment cant be insert');
+			}
+	//	header("Location:".base_url('index.php/welcome/allocate_supervisor_view'));
+	//redirect('/welcome/supervisorComment_view/');
+	}
+	public function ticket_report()
+	{
+		$this->load->view('admin/header');
+		$this->load->view('admin/ticket_report');
+		$this->load->view('admin/footer');
 	}
 }

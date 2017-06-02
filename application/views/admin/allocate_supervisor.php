@@ -1,4 +1,77 @@
+<script>
+function getCities(stateId){
+	$.ajax({
+	  url: "<?php echo base_url('index.php/welcome/getCitiesByStateId') ?>",
+	  method: "post",
+	  data: {
+		  'stateId':stateId
+	  },
+	  success: function(data) {
+		var mydata = JSON.parse(data);
+		if(mydata['status'] == 'success'){
+			var mycity = "";
+			for(var i=0;i< mydata['msg'].length;i++){
+				mycity += '<option value="'+mydata['msg'][i]['id']+'">'+mydata['msg'][i]['name']+'</option>';
+			}
+			$("#cities").html(mycity);
+			//cities
+		}
+	  },
+	  error: function() {
+		 
+	  }
+	});
+}
+function getSites(cityId){
+	$.ajax({
+	  url: "<?php echo base_url('index.php/welcome/getSitesByCityId') ?>",
+	  method: "post",
+	  data: {
+		  'cityId':cityId
+	  },
+	  success: function(data) {
+		var mydata = JSON.parse(data);
+		if(mydata['status'] == 'success'){
+			var mysite = "<option value=''>---Select---</option>";
+			for(var i=0;i< mydata['msg'].length;i++){
+				mysite += '<option value="'+mydata['msg'][i]['site_id']+'">'+mydata['msg'][i]['site_name']+'</option>';
+			}
+			$("#sites").html(mysite);
+		
+		}
+	  },
+	  error: function() {
+		 
+	  }
+	});
+}
+function getTickets(siteId){
+	
+	$.ajax({
+	  url: "<?php echo base_url('index.php/welcome/getTicketsBySiteId') ?>",
+	  method: "post",
+	  data: {
+		  'siteId':siteId,
+		  'route':'supervisor'
+	  },
+	  success: function(data) {
+		var mydata = JSON.parse(data);
+		if(mydata['status'] == 'success'){
+			var myticket = "<option value=''>---Select---</option>";
+			for(var i=0;i< mydata['msg'].length;i++){
+				myticket += '<option value="'+mydata['msg'][i]['ticket_id']+'">'+mydata['msg'][i]['ticket_id']+'</option>';
+			}
+			$("#ticket").html(myticket);
+		
+		}
+	  },
+	  error: function() {
+		 
+	  }
+	});
+}
 
+</script>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -48,22 +121,48 @@
 			?>		
 	
 	 
-?>
+
 			  </div>
             <!-- /.box-header -->
             <!-- form start -->
             <form class="form-horizontal" method="post" action="<?php echo base_url('index.php/welcome/add_allocate_supervisor'); ?>">
               <div class="box-body">
+			   <div class="form-group">
+                  <label  class="col-sm-2 control-label">State</label>
+                  <div class="col-sm-10">
+                    <select name="states" class="form-control" onchange="getCities(this.value);">
+						<option value="">Select</option>
+						<?php foreach($allStates as $states){
+							?>
+							<option value="<?php  echo $states['id']; ?>"><?php echo $states['name'];  ?></option>
+							<?php
+						} ?>
+				   </select>
+                  </div>
+				  </div>
+				   <div class="form-group">
+                  <label  class="col-sm-2 control-label">city</label>
+                  <div class="col-sm-10">
+				   <select name="city" class="form-control" id="cities" onchange="getSites(this.value);">
+						<option value="">Select</option>
+				   </select>
+                  </div>
+                </div>
+				  <div class="form-group">
+                  <label  class="col-sm-2 control-label">Site</label>
+
+                  <div class="col-sm-10">
+				    <select name="site" class="form-control" id="sites" onchange="getTickets(this.value);">
+					<option value="">Select</option>
+				   </select>
+                  </div>
+                </div>
 				  <div class="form-group">
                   <label  class="col-sm-2 control-label">TicketId #</label>
                   <div class="col-sm-10">
 				  <!-- <input type="text" name="supervisor_name" class="form-control">-->
-				  <select name="ticket_id" class="form-control">
-				  <?php foreach($alltickets as $ticket){
-							?>
-							<option value="<?php  echo $ticket['ticket_id']; ?>"><?php echo $ticket['ticket_id'];  ?></option>
-							<?php
-						} ?>
+				  <select name="ticket_id" class="form-control" id="ticket">
+					<option value="">Select</option>
 				  </select>
                   </div>
 				 

@@ -45,6 +45,23 @@ class ComplainModel extends CI_model
 		$sites=$this->db->get('sites')->result_array();
 		return $sites;
 	}
+	public function getTicketsBySiteId()
+	{
+		 $siteId=$this->input->post('siteId');
+		 $route=$this->input->post('route');
+		 $route_state=0;
+		 if($route=='supervisor')
+		 {
+			$route_state=0; 
+		 }
+		 else{
+			 $route_state=2;
+		 }
+		$this->db->where('site',$siteId);
+		$this->db->where('status',$route_state);
+		$ticket=$this->db->get('complain_mst')->result_array();
+		return $ticket;
+	}
 	public function insertSite(){
 		$city=$site=$this->input->post('city');
 		$site=$this->input->post('site');
@@ -176,5 +193,42 @@ class ComplainModel extends CI_model
 		}
 		return $sucess_status_issue;
 	}
+	public function getAllTicketsSupervisorComment(){
+		//$this->db->where('status',2);
+		$tickets = $this->db->get('complain_mst')->result_array();
+		return $tickets;
+	}
 	
+	public function insertCommentSupervisor()
+	{
+			$ticket_id=$this->input->post('ticket_id');
+			$this->db->where('ticket_id',$ticket_id);
+			$status=$this->db->get('supervisor_comment')->result_array();
+			$sucess_status_issue_supervisor=0;
+		if(empty($status))
+		{
+			$ticket_id=$this->input->post('ticket_id');
+			$supervisor_id=$this->input->post('supervisor_id');
+			$supervisorComment=$this->input->post('supervisorComment');
+		
+			$user_data=array(
+			'ticket_id'=>$ticket_id,
+			'issue_comment'=>$supervisorComment,
+			'supervisor_id'=>$supervisor_id
+			);
+			$this->db->insert('supervisor_comment',$user_data);
+			$sucess_status_issue_supervisor=1;
+		}
+		return $sucess_status_issue_supervisor;
+	}
+	public function getSupervisorByTicketId()
+	{
+		$ticketId=$this->input->post('ticketId');
+		$this->db->select('supervisor_mst.supervisor_name,allocate_supervisor.supervisor_id	');
+		$this->db->from('supervisor_mst');
+		$this->db->where('allocate_supervisor.ticket_id',$ticketId);
+		$this->db->join('allocate_supervisor', 'allocate_supervisor.supervisor_id = supervisor_mst.supervisor_id');
+		$supervisor = $this->db->get()->result_array();
+		return $supervisor;
+	}
 }
