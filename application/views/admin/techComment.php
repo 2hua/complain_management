@@ -1,4 +1,28 @@
-
+<script>
+function gettechnician(ticketId){
+	$.ajax({
+	  url: "<?php echo base_url('index.php/welcome/getTechnicianByTicketId') ?>",
+	  method: "post",
+	  data: {
+		  'ticketId':ticketId
+	  },
+	  success: function(data) {
+		var mydata = JSON.parse(data);
+		if(mydata['status'] == 'success'){
+			var mytechnician = "";
+			for(var i=0;i< mydata['msg'].length;i++){
+				mytechnician += '<option value="'+mydata['msg'][i]['technician_id']+'">'+mydata['msg'][i]['technician_name']+'</option>';
+			}
+			$("#technicians").html(mytechnician);
+			//ticket
+		}
+	  },
+	  error: function() {
+		 
+	  }
+	});
+}
+</script>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -58,7 +82,8 @@
                   <label  class="col-sm-2 control-label">TicketId #</label>
                   <div class="col-sm-10">
 				  <!-- <input type="text" name="supervisor_name" class="form-control">-->
-				  <select name="ticket_id" class="form-control">
+				  <select name="ticket_id" class="form-control" onchange="gettechnician(this.value);">
+				  <option value="">---Select---</option>
 				  <?php foreach($allTickets as $ticket){
 							?>
 							<option value="<?php  echo $ticket['ticket_id']; ?>"><?php echo $ticket['ticket_id'];  ?></option>
@@ -67,6 +92,16 @@
 				  </select>
                   </div>
 				 
+                </div>
+				<div class="form-group">
+                  <label  class="col-sm-2 control-label">Technician Name</label>
+
+                  <div class="col-sm-10"> 
+				  <!-- <input type="text" name="qualification" class="form-control">-->
+				  <select name="technician_id" class="form-control" id="technicians">
+					<option value="">---Select---</option>
+				  </select>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label  class="col-sm-2 control-label">Technician Comments</label>

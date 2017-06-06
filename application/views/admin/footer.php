@@ -232,6 +232,9 @@
 <script src="<?php echo base_url('assets/'); ?>plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
 <script src="<?php echo base_url('assets/'); ?>plugins/fastclick/fastclick.js"></script>
+<!-- DataTables -->
+<script src="<?php echo base_url('assets/'); ?>plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?php echo base_url('assets/'); ?>plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo base_url('assets/'); ?>dist/js/app.min.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->

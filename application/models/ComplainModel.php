@@ -15,13 +15,15 @@ class ComplainModel extends CI_model
 			'phone_no'=>$phoneNo,
 			'city'=>$city,
 			'site'=>$site,
-			'issue_desc'=>$issueDesc
+			'issue_desc'=>$issueDesc,
+			'c_created'=>date('Y-m-d h:i:s')
 			);
 		$status=$this->db->insert('complain_mst',$user_data);
 		$id=$this->db->insert_id();
 		$this->db->where('id',$id);
 		$ticket_id=array(
-			'ticket_id'=>$id
+			'ticket_id'=>$id,
+			'c_updated'=>date('Y-m-d h:i:s')
 		);
 		$this->db->update('complain_mst',$ticket_id);
 		
@@ -178,18 +180,22 @@ class ComplainModel extends CI_model
 		{
 			$ticket_id=$this->input->post('ticket_id');
 			$techComment=$this->input->post('techComment');
-		
+			$tech_id=$this->input->post('technician_id');
 			$user_data=array(
 			'ticket_id'=>$ticket_id,
-			'issue_comment'=>$techComment
+			'issue_comment'=>$techComment,
+			'tech_id'=>$tech_id,
+			'closed_at'=>date('Y-m-d h:i:s')
 			);
-			$this->db->insert('closing_comment',$user_data);
+			$insrt = $this->db->insert('closing_comment',$user_data);
 			$this->db->where('ticket_id',$ticket_id);
 			$user_data=array(
-			'status'=>1
+			'status'=>1,
+			'c_updated'=>date('Y-m-d h:i:s')
 			);
-			$this->db->update('complain_mst',$user_data);
+			$updt = $this->db->update('complain_mst',$user_data);
 			$sucess_status_issue=1;
+		
 		}
 		return $sucess_status_issue;
 	}
@@ -230,5 +236,51 @@ class ComplainModel extends CI_model
 		$this->db->join('allocate_supervisor', 'allocate_supervisor.supervisor_id = supervisor_mst.supervisor_id');
 		$supervisor = $this->db->get()->result_array();
 		return $supervisor;
+	}
+	public function getTechnicianByTicketId()
+	{
+		$ticketId=$this->input->post('ticketId');
+		$this->db->select('technician_mst.technician_name,allocate_technician.technician_id	');
+		$this->db->from('technician_mst');
+		$this->db->where('allocate_technician.ticket_id',$ticketId);
+		$this->db->join('allocate_technician', 'allocate_technician.technician_id = technician_mst.technician_id');
+		$technician = $this->db->get()->result_array();
+		return $technician;
+	}
+	public function getClosingReport()
+	{
+		$this->db->select('complain_mst.*,allocate_supervisor.*,closing_comment.*');
+		$this->db->from('complain_mst');
+		$this->db->join('closing_comment','closing_comment.ticket_id=complain_mst.ticket_id');
+		$this->db->join('allocate_supervisor','complain_mst.ticket_id=allocate_supervisor.ticket_id');
+		$this->db->where('complain_mst.status',1);
+		$closing_report=$this->db->get()->result_array();
+		//echo $this->db->last_query();
+		//die();
+		return $closing_report;
+	}
+	public function getSupervisorById($supervisor_id)
+	{
+		$this->db->where('supervisor_id',$supervisor_id);
+		$supervisor=$this->db->get('supervisor_mst')->result_array();
+		return $supervisor;
+	}
+	public function getCitiesById($cityId)
+	{
+		$this->db->where('id',$cityId);
+		$city=$this->db->get('cities')->result_array();
+		return $city;
+	}
+	public function getSitesById($site_id)
+	{
+		$this->db->where('site_id',$site_id);
+		$site=$this->db->get('sites')->result_array();
+		return $site;
+	}
+	public function getTechnicianById($technician_id)
+	{
+		$this->db->where('technician_id',$technician_id);
+		$technician=$this->db->get('technician_mst')->result_array();
+		return $technician;
 	}
 }

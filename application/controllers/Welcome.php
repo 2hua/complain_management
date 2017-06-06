@@ -92,6 +92,11 @@ class Welcome extends CI_Controller {
 		$supervisor=$this->ComplainModel->getSupervisorByTicketId();
 		die(json_encode(array('msg'=>$supervisor,'status'=>'success')));
 	}
+	public function getTechnicianByTicketId()
+	{
+		$technician=$this->ComplainModel->getTechnicianByTicketId();
+		die(json_encode(array('msg'=>$technician,'status'=>'success')));
+	}
 	public function add_site()
 	{
 		$this->ComplainModel->insertSite();
@@ -148,6 +153,7 @@ class Welcome extends CI_Controller {
 	{
 		$data['allTechnicians'] = $this->ComplainModel->getAllTechnicians();
 		$data['allTickets']=$this->ComplainModel->getAllTicketsTech();
+		$data['allStates'] = $this->ComplainModel->getAllStates();
 		$this->load->view('admin/header');
 		$this->load->view('admin/allocate_technician',$data);
 		$this->load->view('admin/footer');
@@ -208,8 +214,11 @@ class Welcome extends CI_Controller {
 	}
 	public function ticket_report()
 	{
+		$data['closingReport']=$this->ComplainModel->getClosingReport();
+		//echo "<pre>";
+		//print_r($report);
 		$this->load->view('admin/header');
-		$this->load->view('admin/ticket_report');
+		$this->load->view('admin/ticket_report',$data);
 		$this->load->view('admin/footer');
 	}
 }
