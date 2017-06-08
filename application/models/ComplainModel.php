@@ -11,8 +11,10 @@ class ComplainModel extends CI_model
 		$city=$this->input->post('city');
 		$site=$this->input->post('site');
 		$issueDesc=$this->input->post('issueDesc');
+		$states=$this->input->post('states');
 			$user_data=array(
 			'phone_no'=>$phoneNo,
+			'states'=>$states,
 			'city'=>$city,
 			'site'=>$site,
 			'issue_desc'=>$issueDesc,
@@ -282,5 +284,41 @@ class ComplainModel extends CI_model
 		$this->db->where('technician_id',$technician_id);
 		$technician=$this->db->get('technician_mst')->result_array();
 		return $technician;
+	}
+	public function getData()
+	{
+		$data=$this->db->get('complain_mst')->result_array();
+		return $data;
+		
+	}
+	
+	function getDataById($id)
+	{
+		$this->db->where('id',$id);
+		$myData = $this->db->get('complain_mst')->result_array();
+		return $myData;
+	}
+	function updateUserData()
+	{
+		$id=$this->input->post('id');
+		$phone_no = $this->input->post('phoneNo');
+		$state = $this->input->post('states');
+		$city = $this->input->post('city');
+		$site = $this->input->post('site');
+		$issue_desc = $this->input->post('issueDesc');
+		$user_data=array(
+			'phone_no'=>$phone_no,
+			'states'=>$state,
+			'city'=>$city,
+			'site'=>$site,
+			'issue_desc'=>$issue_desc,
+			
+			
+		);
+		$this->db->where('id',$id);
+		$status = $this->db->update('complain_mst',$user_data);
+		if($status>0){
+			echo "Updated successfully.";
+		}
 	}
 }

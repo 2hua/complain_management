@@ -1,4 +1,67 @@
+<?php
+		$id = "";
+		$ticket_id = "";
+		$phone_no = "";
+		$issue_desc="";
+		$state="";
+		$city="";
+		$site="";
+		if(isset($selected_data) && !empty($selected_data)){
+			$id = $selected_data[0]['id'];
+			$ticket_id = $selected_data[0]['ticket_id'];
+			$phone_no = $selected_data[0]['phone_no'];
+			$state=$selected_data[0]['states'];
+			$city=$selected_data[0]['city'];
+			$site=$selected_data[0]['site'];
+			$issue_desc=$selected_data[0]['issue_desc'];
+		}
+
+?>
 <script>
+
+$(document).ready(function(){
+	var stateid = '<?php echo $state; ?>';
+	var cityid = '<?php echo $city; ?>';
+	if(stateid !=="" && cityid !==""){
+		setTimeout(function(){
+			getCitiesSelected($("#states").val()); 
+			//getSitesSelected($("#cities").val());
+		}, 1000);
+		setTimeout(function(){
+			//getCitiesSelected($("#states").val()); 
+			getSitesSelected($("#cities").val());
+		}, 1500);
+	}
+	
+	
+});
+function getCitiesSelected(stateId){
+	var mycityid = '<?php echo $city; ?>';
+	
+	$.ajax({
+	  url: "<?php echo base_url('index.php/welcome/getCitiesByStateId') ?>",
+	  method: "post",
+	  data: {
+		  'stateId':stateId
+	  },
+	  success: function(data) {
+		var mydata = JSON.parse(data);
+		if(mydata['status'] == 'success'){
+			var mycity = "";
+				
+			for(var i=0;i< mydata['msg'].length;i++){
+				mycity += '<option value="'+mydata['msg'][i]['id']+'" >'+mydata['msg'][i]['name']+'</option>';
+			}
+			$("#cities").html(mycity);
+			$("#cities").val(mycityid);
+			//cities
+		}
+	  },
+	  error: function() {
+		 
+	  }
+	});
+}
 function getCities(stateId){
 	$.ajax({
 	  url: "<?php echo base_url('index.php/welcome/getCitiesByStateId') ?>",
@@ -14,7 +77,6 @@ function getCities(stateId){
 				mycity += '<option value="'+mydata['msg'][i]['id']+'">'+mydata['msg'][i]['name']+'</option>';
 			}
 			$("#cities").html(mycity);
-			//cities
 		}
 	  },
 	  error: function() {
@@ -45,6 +107,33 @@ function getSites(cityId){
 	  }
 	});
 }
+function getSitesSelected(cityId){
+	var mysiteid = '<?php echo $site; ?>';
+	//alert(mysiteid);
+	$.ajax({
+	  url: "<?php echo base_url('index.php/welcome/getSitesByCityId') ?>",
+	  method: "post",
+	  data: {
+		  'cityId':cityId
+	  },
+	  success: function(data) {
+		var mydata = JSON.parse(data);
+		if(mydata['status'] == 'success'){
+			var mysite = "";
+			for(var i=0;i< mydata['msg'].length;i++){
+				mysite += '<option value="'+mydata['msg'][i]['site_id']+'">'+mydata['msg'][i]['site_name']+'</option>';
+			}
+			$("#sites").html(mysite);
+			$("#sites").val(mysiteid);
+		
+		}
+	  },
+	  error: function() {
+		 
+	  }
+	});
+}
+
 </script>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -88,25 +177,29 @@ function getSites(cityId){
 	}
 	?>
 			  </div>
+			  
             <!-- /.box-header -->
             <!-- form start -->
-            <form class="form-horizontal" method="post" action="<?php echo base_url('index.php/welcome/book_complain'); ?>">
+            <form class="form-horizontal" method="post" action="<?php if(isset($selected_data) && !empty($selected_data)) echo base_url('index.php/welcome/update_data/'); else echo base_url('index.php/welcome/book_complain');?>">
               <div class="box-body">
+			  <?php if(isset($selected_data) && !empty($selected_data)){ ?>
+				<input type="hidden" name="id" value="<?php echo $selected_data[0]['id'];  ?>" />
+			<?php } ?>
                 <div class="form-group">
                   <label  class="col-sm-2 control-label">Phone No</label>
 
                   <div class="col-sm-10">
-                    <input type="text" class="form-control"  placeholder="phone number" name="phoneNo">
+                    <input type="text" class="form-control"  placeholder="phone number" name="phoneNo" value="<?php echo $phone_no; ?>">
                   </div>
 				  </div>
 				  <div class="form-group">
                   <label  class="col-sm-2 control-label">State</label>
                   <div class="col-sm-10">
-                    <select name="states" class="form-control" onchange="getCities(this.value);">
+                    <select name="states" id="states" class="form-control" onchange="getCities(this.value);">
 						<option value="">Select</option>
 						<?php foreach($allStates as $states){
 							?>
-							<option value="<?php  echo $states['id']; ?>"><?php echo $states['name'];  ?></option>
+							<option value="<?php  echo $states['id']; ?>" <?php if($states['id'] == $state) echo "selected"; ?>><?php echo $states['name'];  ?></option>
 							<?php
 						} ?>
 				   </select>
@@ -134,7 +227,7 @@ function getSites(cityId){
 
                   <div class="col-sm-10">
                    <!-- <input type="text" class="form-control"  placeholder="Password">!-->
-				   <textarea cols="30" rows="10" name="issueDesc" class="form-control"></textarea>
+				   <textarea cols="30" rows="10" name="issueDesc" class="form-control"><?php echo $issue_desc; ?></textarea>
                   </div>
                 </div>
                 
@@ -145,6 +238,43 @@ function getSites(cityId){
                 <button type="submit" class="btn btn-info pull-right">Book</button>
               </div>
               <!-- /.box-footer -->
+			  
+			  <table  class="table table-striped">
+				<tr>
+					<th>ID</th>
+					<th>TICKET-ID</th>
+					<th>PHONE NUMBER</th>
+					<th>CITY</th>
+					<th>SITE</th>
+					<th>ISSUE DESCRIPTION</th>
+					<th>STATUS</th>
+					<th>CREATED</th>
+					<th>UPDATE</th>
+					
+				</tr>
+				<?php 
+					foreach($data as $complain)
+					{?>
+					<tr>
+						<td><?php echo $complain['id']; ?></td>
+						<td><?php echo $complain['ticket_id']; ?></td>
+						<td><?php echo $complain['phone_no']; ?></td>
+						<td><?php $city= $this->ComplainModel->getCitiesById($complain['city']); 
+						echo $city[0]['name'];
+						?></td>
+
+						<td><?php $site=$this->ComplainModel->getSitesById($complain['site']);
+						echo $site[0]['site_name'];
+						?></td>
+						<td><?php echo $complain['issue_desc']; ?></td>
+						<td><?php echo $complain['status']; ?></td>
+						<td><?php echo $complain['c_created']; ?></td>
+						<td><a href="<?php echo base_url('/index.php/welcome/index/').$complain['id']; ?>">Edit</a></td>
+						
+					</tr>
+				<?php
+					}?>
+			  </table>
             </form>
           </div>
           <!-- /.box -->

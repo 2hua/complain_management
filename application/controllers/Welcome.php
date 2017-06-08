@@ -32,11 +32,63 @@ class Welcome extends CI_Controller {
 	}
 	public function index()
 	{
+		$this->load->view('admin/login');
+	}
+	public function userLogin()
+	{
+		$this->load->database();
+		$email=$this->input->post('email');
+		$password=$this->input->post('password');
+		$this->db->where('email',$email);
+		$chkEmail=$this->db->get('user_mst')->result_array();
+		if(!empty($chkEmail)){
+			if($chkEmail[0]['password']==$password)
+			{
+				$this->session->set_userdata('user_id',$chkEmail[0]['user_id']);
+				$this->session->set_userdata('email',$chkEmail[0]['email']);
+				$this->session->set_userdata('user_name',$chkEmail[0]['fname']." ".$chkEmail[0]['lname']);
+				
+				redirect(base_url().'/index.php/welcome/bookingMaster');
+			}
+			else
+			{
+				$this->session->set_flashdata('pass_notexist','password not match with your email');
+				redirect(base_url());
+			}
+		}else{
+			$this->session->set_flashdata('email_notexist','email not exist');
+			redirect(base_url());
+		}
 		
+		
+	}
+	public function logout()
+	{
+		$this->session->unset_userdata('user_id',$chkEmail[0]['user_id']);
+		$this->session->unset_userdata('user_id',$chkEmail[0]['email']);
+		$this->session->unset_userdata('user_id',$chkEmail[0]['user_name']);
+		redirect(base_url());
+	}
+	public function bookingMaster($id="")
+	{
+		if($this->session->userdata('user_id'))
+		{
+				
+		if($id !="")
+		{
+			$mydata = $this->ComplainModel->getDataById($id);
+			$data['selected_data']=$mydata;
+		}
+	
+		$data['data']=$this->ComplainModel->getData();
 		$data['allStates'] = $this->ComplainModel->getAllStates();
 		$this->load->view('admin/header');
 		$this->load->view('admin/dashboard',$data);
 		$this->load->view('admin/footer');
+		}
+		else{
+			redirect(base_url());
+		}
 	}
 	public function book_complain()
 	{
@@ -221,4 +273,10 @@ class Welcome extends CI_Controller {
 		$this->load->view('admin/ticket_report',$data);
 		$this->load->view('admin/footer');
 	}
+	public function update_data(){
+		$this->ComplainModel->updateUserData();
+		header("Location:".base_url('/index.php/welcome/'));
+	}
+	
+	
 }

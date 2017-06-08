@@ -257,7 +257,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="<?php echo base_url('assets/'); ?>dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Alexander </span>
+              <span class="hidden-xs"> <?php if($this->session->userdata('user_name')) echo $this->session->userdata('user_name'); ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -265,8 +265,8 @@
                 <img src="<?php echo base_url('assets/'); ?>dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  <?php if($this->session->userdata('user_name')) echo $this->session->userdata('user_name'); ?>
+  
                 </p>
               </li>
               <!-- Menu Body -->
@@ -290,7 +290,7 @@
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="<?php echo base_url('index.php/welcome/logout');?>" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -332,7 +332,7 @@
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
         <li>
-          <a href="<?php echo base_url('index.php/welcome/'); ?>">
+          <a href="<?php echo base_url('index.php/welcome/bookingMaster'); ?>">
             <i class="fa fa-th"></i> <span>Complain Booking</span>
           </a>
         </li>
